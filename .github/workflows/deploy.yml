@@ -27,7 +27,7 @@ jobs:
       - name: Download Godot
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          wget https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip -O godot.zip
+          wget https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip -O godot.zip
           unzip godot.zip -d godot
           mv godot/Godot_v${GODOT_VERSION}-stable_linux.x86_64 godot/godot
           chmod +x godot/godot
@@ -35,7 +35,7 @@ jobs:
       - name: Download Godot Export Templates
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          wget https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_export_templates.tpz -O templates.tpz
+          wget https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_export_templates.tpz -O templates.tpz
           mkdir -p ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
           unzip -q templates.tpz -d templates
           mv templates/templates/* ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable/
