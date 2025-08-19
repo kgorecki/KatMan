@@ -3,7 +3,7 @@ name: Build and Deploy Godot HTML5
 on:
   push:
     branches:
-      - gh-pages
+      - deployment
   workflow_dispatch:
 
 jobs:
