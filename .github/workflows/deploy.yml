@@ -9,19 +9,47 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      GODOT_VERSION: 4.4.1
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Export Godot project
-        uses: firebelley/godot-export@v5.2.0
+      - name: Cache Godot and templates
+        uses: actions/cache@v4
         with:
-          godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/4.2.2/Godot_v4.2.2-stable_linux.x86_64.zip
-          godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/4.2.2/Godot_v4.2.2-stable_export_templates.tpz
-          export_preset: "Web"
-          export_path: build/index.html
-          cache: true
+          path: |
+            godot
+            ~/.local/share/godot/export_templates/${{ env.GODOT_VERSION }}.stable
+          key: godot-${{ env.GODOT_VERSION }}
+
+      - name: Download Godot
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          wget https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip -O godot.zip
+          unzip godot.zip -d godot
+          mv godot/Godot_v${GODOT_VERSION}-stable_linux.x86_64 godot/godot
+          chmod +x godot/godot
+
+      - name: Download Godot Export Templates
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          wget https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_export_templates.tpz -O templates.tpz
+          mkdir -p ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+          unzip -q templates.tpz -d templates
+          mv templates/templates/* ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable/
+
+      - name: Build HTML5
+        run: |
+          mkdir -p build
+          ./godot/godot --headless --export-release "Web" build/index.html
+
+      - name: Show Godot export logs
+        run: cat ~/.local/share/godot/console.log || true
+
+      - name: List build directory
+        run: ls -l build
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
