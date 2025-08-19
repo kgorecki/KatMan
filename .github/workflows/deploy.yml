@@ -14,7 +14,16 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
+      - name: Cache Godot and templates
+        uses: actions/cache@v4
+        with:
+          path: |
+            godot
+            ~/.local/share/godot/export_templates/4.2.2.stable
+          key: godot-4.2.2
+
       - name: Download Godot
+        if: steps.cache.outputs.cache-hit != 'true'
         run: |
           GODOT_VERSION=4.2.2
           wget https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip -O godot.zip
@@ -23,6 +32,7 @@ jobs:
           chmod +x godot/godot
 
       - name: Download Godot Export Templates
+        if: steps.cache.outputs.cache-hit != 'true'
         run: |
           GODOT_VERSION=4.2.2
           wget https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_export_templates.tpz -O templates.tpz
