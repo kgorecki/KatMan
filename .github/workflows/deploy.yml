@@ -45,14 +45,9 @@ jobs:
           mkdir -p build
           ./godot/godot --headless --export-release "Web" build/index.html
 
-      - name: Show Godot export logs
-        run: cat ~/.local/share/godot/console.log || true
-
-      - name: List build directory
-        run: ls -l build
-
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build
+          publish_branch: gh-pages-static
