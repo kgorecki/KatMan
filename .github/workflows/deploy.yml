@@ -3,8 +3,7 @@ name: Build and Deploy Godot HTML5
 on:
   push:
     branches:
-      - deployment
-      - main
+      - '**'
 
 jobs:
   build:
@@ -45,9 +44,14 @@ jobs:
           mkdir -p build
           ./godot/godot --headless --export-release "Web" build/index.html
 
+      - name: Move build to branch subfolder
+        run: |
+          mkdir -p deploy/${{ github.ref_name }}
+          cp -r build/* deploy/${{ github.ref_name }}/
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
+          publish_dir: ./deploy
           publish_branch: gh-pages-static
