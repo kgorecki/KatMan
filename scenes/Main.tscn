@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://xy6t81f6ypli"]
+[gd_scene load_steps=3 format=3 uid="uid://xy6t81f6ypli"]
 
 [ext_resource type="Script" uid="uid://b2twjfiv4dqfq" path="res://scripts/level.gd" id="1_wk8n7"]
+[ext_resource type="PackedScene" uid="uid://cn2tpp4u3uk2p" path="res://scenes/VirtualJoystick.tscn" id="2_rvslj"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_wk8n7")
@@ -13,3 +14,5 @@ offset_top = 8.0
 offset_right = 600.0
 offset_bottom = 40.0
 text = "Score: 0    Lives: 3"
+
+[node name="VirtualJoystick" parent="UI" instance=ExtResource("2_rvslj")]
