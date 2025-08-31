@@ -1,0 +1,50 @@
+[gd_scene load_steps=4 format=3 uid="uid://cs01ibw541h7q"]
+
+[ext_resource type="Texture2D" uid="uid://dmjdej1h1h7ed" path="res://assets/hat-transparent.png" id="2_1cqgp"]
+[ext_resource type="Texture2D" uid="uid://diln2ll5a71kw" path="res://assets/siwy.png" id="3_oyooa"]
+
+[sub_resource type="GDScript" id="GDScript_yfhh2"]
+script/source = "extends Node2D
+
+@onready var teams = [$Team1, $Team2]
+@onready var selector = $Selector
+var selected_index = 0
+
+func _ready():
+	update_selector()
+
+func _process(delta):
+	if Input.is_action_just_pressed(\"ui_right\"):
+		selected_index = (selected_index + 1) % teams.size()
+		update_selector()
+	elif Input.is_action_just_pressed(\"ui_left\"):
+		selected_index = (selected_index - 1 + teams.size()) % teams.size()
+		update_selector()
+	elif Input.is_action_just_pressed(\"ui_accept\") or Input.is_action_just_pressed(\"click\"):
+		start_game(selected_index)
+
+func update_selector():
+	var target = teams[selected_index]
+	selector.global_position = target.global_position - Vector2(10, 10)
+	selector.size = target.size + Vector2(20, 20)
+
+func start_game(index):
+	print(\"Wybrano drużynę: %d\" % index)
+	var game_scene = preload(\"res://scenes/Main.tscn\").instantiate()
+	get_tree().change_scene_to_packed(game_scene)
+"
+
+[node name="SelectTeam" type="Node2D"]
+script = SubResource("GDScript_yfhh2")
+
+[node name="TeamA" type="TextureRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("2_1cqgp")
+stretch_mode = 3
+
+[node name="TeamB" type="TextureRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("3_oyooa")
+stretch_mode = 3
