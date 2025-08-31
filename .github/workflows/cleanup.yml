@@ -1,0 +1,28 @@
+name: Cleanup GitHub Pages for Deleted Branch
+
+on:
+  delete:
+    branches:
+      - '**'
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout gh-pages-static branch
+        uses: actions/checkout@v3
+        with:
+          ref: gh-pages-static
+
+      - name: Remove deleted branch folder
+        run: |
+          echo "Deleting folder: ${{ github.event.ref }}"
+          rm -rf "${{ github.event.ref }}"
+      
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add -A
+          git commit -m "Cleanup: remove folder for deleted branch ${{ github.event.ref }}" || exit 0
+          git push
