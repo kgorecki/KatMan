@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b1sxjruv35awm"
-path="res://.godot/imported/hat32.png-f06461f379425ec704493671f17f16ec.ctex"
+uid="uid://62xtxspbuvkx"
+path="res://.godot/imported/harris.png-90ff3071ec636b1f32efdda443862163.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/hat32.png"
-dest_files=["res://.godot/imported/hat32.png-f06461f379425ec704493671f17f16ec.ctex"]
+source_file="res://assets/harris.png"
+dest_files=["res://.godot/imported/harris.png-90ff3071ec636b1f32efdda443862163.ctex"]
 
 [params]
 

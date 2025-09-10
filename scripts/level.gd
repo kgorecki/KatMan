@@ -13,6 +13,17 @@ var score:int = 0
 var lives:int = 3
 var player: Node2D
 
+var players := {
+	0: "res://assets/hat.png",
+	1: "res://assets/siwy.png",
+}
+
+var current_ghost = 0
+var ghosts := {
+	0: [ "res://assets/siwy.png", "res://assets/harris.png", "res://assets/team0_ghost2.png", "res://assets/team0_ghost3.png" ],
+	1: [ "res://assets/hat.png", "res://assets/harris.png", "res://assets/team1_ghost2.png", "res://assets/team1_ghost3.png" ],
+}
+
 # Very small, simple map: #=wall, .=pellet, P=player start, G=ghost start, ' ' empty
 const MAP := [
 	"##########################",
@@ -85,6 +96,7 @@ func _spawn_pellet(pos: Vector2) -> void:
 	var dot := Node2D.new()
 	dot.position = Vector2.ZERO
 	dot.set_script(load("res://scripts/pellet_draw.gd"))
+	dot.z_index = 1
 	pellet.add_child(dot)
 
 	add_child(pellet)
@@ -94,7 +106,7 @@ func _spawn_player(pos: Vector2) -> void:
 	player.position = pos
 	player.set_script(load("res://scripts/player.gd"))
 	var sprite = Sprite2D.new()
-	sprite.texture = load("res://assets/hat32.png")
+	sprite.texture = load(players[Global.selected_team])
 	player.add_child(sprite)
 	add_child(player)
 	# collision
@@ -109,7 +121,7 @@ func _spawn_ghost(pos: Vector2) -> void:
 	ghost.position = pos
 	ghost.set_script(load("res://scripts/ghost.gd"))
 	var sprite = Sprite2D.new()
-	sprite.texture = load("res://assets/harris32.png")
+	sprite.texture = load(ghosts[Global.selected_team][current_ghost])
 	ghost.add_child(sprite)
 	add_child(ghost)
 	# collision
@@ -118,6 +130,8 @@ func _spawn_ghost(pos: Vector2) -> void:
 	shape.radius = 12
 	col.shape = shape
 	ghost.add_child(col)
+	current_ghost += 1
+	ghost.z_index = 10
 
 func _on_pellet_body_entered(body: Node, pellet: Area2D) -> void:
 	if body == player and pellet.is_inside_tree():

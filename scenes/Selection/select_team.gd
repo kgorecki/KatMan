@@ -9,6 +9,7 @@ extends Control
 @onready var start_button = $ColorRect/StartButton
 
 var selected_index := 0
+var marker_y_offset := 25
 
 func _ready() -> void:
 	await get_tree().process_frame
@@ -31,9 +32,15 @@ func _on_team_gui_input(event: InputEvent, idx):
 		_update_marker_position()
 	
 func _on_start_pressed():
+	Global.selected_team = selected_index
 	get_tree().change_scene_to_file("res://scenes/Main.tscn")
 	
 func _update_marker_position():
 	var target = team_nodes[selected_index]
 	var target_center = target.global_position.x + target.size.x / 2
 	marker.global_position.x = target_center - marker.size.x / 2
+	marker.global_position.y = target.global_position.y + target.size.y - marker.size.y + marker_y_offset
+
+func _input(event):
+	if Input.is_action_just_pressed("ui_start"):
+		start_button.emit_signal("pressed")

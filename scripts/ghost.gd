@@ -11,7 +11,6 @@ func _ready() -> void:
 	dir = dirs[randi() % dirs.size()]
 
 func _physics_process(_delta: float) -> void:
-	print("Ghost physics running")
 	# try to move; if hitting wall, pick a new random dir
 	velocity = dir * speed
 	var remainder := move_and_slide()
