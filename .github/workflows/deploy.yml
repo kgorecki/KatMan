@@ -56,3 +56,18 @@ jobs:
           publish_dir: ./deploy
           publish_branch: gh-pages-static
           keep_files: true
+          
+      - name: Create redirect to main
+        run: |
+          mkdir -p deploy
+          cat > deploy/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <meta http-equiv="refresh" content="0; url=./main/">
+              <title>Redirecting...</title>
+            </head>
+            <body>
+              <p>Redirecting to <a href="./main/">main</a>...</p>
+            </body>
+          </html>
